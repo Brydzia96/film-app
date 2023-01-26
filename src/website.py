@@ -12,7 +12,7 @@ def init_request(film_title, url, selector):
     title_data = parsed_html_mainpage.select(selector)
     return title_data
 
-def cuttingAroundString(string, cutting_list=None):
+def cutting_around_string(string, cutting_list=None):
         string = string.split(f'{cutting_list[0]}')[1]
         string = string.split(f'{cutting_list[1]}')[0]
         return string
@@ -67,8 +67,8 @@ class RottenTomatoes:
         parsed_html_film_page = self.__get_final_web(self.url)
         if parsed_html_film_page:
             span = str(parsed_html_film_page.find_all("script", id="score-details-json")[0].get_text())
-            self.tomatometer_score = cuttingAroundString(span, ['tomatometerScore":', ','])
-            self.audience_score = cuttingAroundString(span, ['"audienceScore":', ','])
+            self.tomatometer_score = cutting_around_string(span, ['tomatometerScore":', ','])
+            self.audience_score = cutting_around_string(span, ['"audienceScore":', ','])
         else:
             self.tomatometer_score = "No score"
             self.audience_score = "No score" 

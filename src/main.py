@@ -8,7 +8,7 @@ from rich.table import Table
 console = Console()
 
 
-def getInfo():
+def get_info():
 
     #Getting data from user
     film_title = typer.prompt("Enter film name")
@@ -19,7 +19,7 @@ def getInfo():
     return film_title, film_year
 
 
-def getValues(film_title, film_year):
+def get_values(film_title, film_year):
     imdb = website.Imdb(film_title, film_year)
     imdb.get_score()
     rotten = website.RottenTomatoes(film_title, film_year)
@@ -36,7 +36,7 @@ def getValues(film_title, film_year):
         return None, None
 
 
-def addToDatabase(film_title, film_year, imdb, rotten):
+def add_to_database(film_title, film_year, imdb, rotten):
     con = sqlite3.connect("film.db")
     cur = con.cursor()
 
@@ -51,7 +51,7 @@ def addToDatabase(film_title, film_year, imdb, rotten):
     con.close()
 
 
-def retrieveFromDatabase():
+def retrieve_from_database():
     con = sqlite3.connect("film.db")
     cur = con.cursor()
     table = Table("Year", "Title", "IMBD score", "Rotten audience score" )
@@ -65,14 +65,14 @@ def retrieveFromDatabase():
 
 
 def main():
-    film_title, film_year = getInfo()
-    imdb, rotten = getValues(film_title, film_year)
+    film_title, film_year = get_info()
+    imdb, rotten = get_values(film_title, film_year)
     if imdb:
-        addToDatabase(film_title, film_year, imdb, rotten)
+        add_to_database(film_title, film_year, imdb, rotten)
 
     sort = typer.prompt("Would you like to display the year sorted film table? y/n")
     if sort == "y":
-        retrieveFromDatabase()
+        retrieve_from_database()
     elif sort == "n":
         print("Have a good day :) Bye")
     else:
