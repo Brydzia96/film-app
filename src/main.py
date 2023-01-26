@@ -2,14 +2,14 @@ import os
 import sqlite3
 import website
 import typer
+
 from rich import print 
 from rich.console import Console
 from rich.table import Table
+
 console = Console()
 
-
 def get_info():
-
     #Getting data from user
     film_title = typer.prompt("Enter film name")
     
@@ -17,7 +17,6 @@ def get_info():
     film_year = typer.prompt("Enter film year")
     film_year = str(film_year)
     return film_title, film_year
-
 
 def get_values(film_title, film_year):
     imdb = website.Imdb(film_title, film_year)
@@ -35,7 +34,6 @@ def get_values(film_title, film_year):
         print("No valid input")
         return None, None
 
-
 def add_to_database(film_title, film_year, imdb, rotten):
     con = sqlite3.connect("film.db")
     cur = con.cursor()
@@ -45,11 +43,9 @@ def add_to_database(film_title, film_year, imdb, rotten):
     cur.execute(f"""
     INSERT INTO film VALUES
      ('{film_title}', '{film_year}', '{imdb.score}', '{rotten.audience_score}') """)
-   
-    
+      
     con.commit()
     con.close()
-
 
 def retrieve_from_database():
     con = sqlite3.connect("film.db")
@@ -63,10 +59,10 @@ def retrieve_from_database():
     con.close()   
     console.print(table)
 
-
 def main():
     film_title, film_year = get_info()
     imdb, rotten = get_values(film_title, film_year)
+
     if imdb:
         add_to_database(film_title, film_year, imdb, rotten)
 
@@ -77,10 +73,9 @@ def main():
         print("Have a good day :) Bye")
     else:
         print("I didn't get it. See you later")
-
-    
+ 
+   
 if __name__ == "__main__":
-
     typer.run(main)
     
 

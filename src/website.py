@@ -3,6 +3,7 @@ import sys
 import os
 import difflib
 import string
+
 from bs4 import BeautifulSoup
 
 
@@ -17,21 +18,18 @@ def cutting_around_string(string, cutting_list=None):
         string = string.split(f'{cutting_list[1]}')[0]
         return string
 
-
 def string_similarity(str1, str2):
     result =  difflib.SequenceMatcher(a=str1.lower(), b=str2.lower())
     return result.ratio()
 
    
 class RottenTomatoes:    
-
     def __init__(self, film_title, film_year):
         self.film_title = film_title
         self.film_year = film_year
         self.url = f"https://www.rottentomatoes.com/search?search={self.film_title}"
 
     def __get_final_web(self, url):
-
         checkpoint = False
         self.title_data = init_request(self.film_title, url, "#search-results > search-page-result")
         new = BeautifulSoup(str(self.title_data), "html.parser")
@@ -63,7 +61,6 @@ class RottenTomatoes:
             return parsed_html_film_page
 
     def get_score(self):
-
         parsed_html_film_page = self.__get_final_web(self.url)
         if parsed_html_film_page:
             span = str(parsed_html_film_page.find_all("script", id="score-details-json")[0].get_text())
@@ -75,17 +72,15 @@ class RottenTomatoes:
 
 
 class Imdb:
-    
-
     def __init__(self, film_title, film_year):
         self.film_title = film_title
         self.film_year = film_year
         self.url = f"https://www.imdb.com/find/?q={self.film_title}&ref_=nv_sr_sm"
 
     def __get_final_web(self, url):
-
         self.title_data = init_request(self.film_title, url, "li.find-title-result")       
         checkpoint = False
+
         for title in self.title_data:
             try:
                 year = title.select("div:nth-child(2) > div:nth-child(1) > ul:nth-child(2) > li:nth-child(1) > label:nth-child(1)")[0].get_text()
@@ -97,7 +92,6 @@ class Imdb:
                 if ratio > 0.85:
                     checkpoint = True        
                     break
-        
             except Error:
                 sys.exit('Something went wrong')
 
@@ -117,8 +111,7 @@ class Imdb:
         else:
             self.score = "No score"
 
-        
-        
+            
 if __name__ == "__main__":
     pass
     
